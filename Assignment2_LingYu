@@ -1,0 +1,42 @@
+Enter file contents here
+## Part 1
+
+makeCacheMatrix = function(x = matrix()) {
+  
+  x.inv <- NULL 
+  set <- function(y) {
+    x <<- y
+    x.inv <<- NULL 
+  }
+  
+  get <- function() x 
+  set.Inv <- function(inv) x.inv <<- inv 
+  get.Inv <- function() x.inv # return the inversed matrix
+ 
+  list(set = set, get = get,
+       set.Inv = set.Inv,
+       get.Inv = get.Inv)
+}
+
+## Part 2
+cacheSolve = function(x, ...) {
+  m <- x$get.Inv() 
+  if(!is.null(m)) { 
+    message("getting cached data")
+    return(m) 
+  }
+  data <- x$get() 
+  m <- solve(data) 
+  x$set.Inv(m) 
+  m 
+}
+
+# Test
+test <- matrix(runif(9,1,100),3,3) # generate a non-singular matrix
+test
+
+testCached <- makeCacheMatrix(test)
+testCached
+
+test.Inv <- cacheSolve(testCached)
+test.Inv
